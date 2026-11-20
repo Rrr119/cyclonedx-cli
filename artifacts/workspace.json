@@ -1,0 +1,17 @@
+{
+  "root": "/home/dev/feedback/uid28766",
+  "B": "/home/dev/feedback/uid28766",
+  "sha": "48ed3e4520e287cb45161b5374ba113aedda1afa",
+  "wslDistro": "Ubuntu-26.04",
+  "source": {
+    "owner": "CycloneDX",
+    "repo": "cyclonedx-cli",
+    "sha": "48ed3e4520e287cb45161b5374ba113aedda1afa"
+  },
+  "fork": {
+    "owner": "Rrr119",
+    "repo": "cyclonedx-cli",
+    "cloneUrl": "https://github.com/Rrr119/cyclonedx-cli.git"
+  },
+  "at": "2026-11-20T02:52:43.299Z"
+}

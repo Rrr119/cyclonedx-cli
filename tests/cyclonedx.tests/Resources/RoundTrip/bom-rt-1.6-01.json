@@ -1,0 +1,84 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "serialNumber": "urn:uuid:1b6f1c2a-0001-4a01-9a01-000000000101",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2024-05-01T10:00:00Z",
+    "lifecycles": [
+      {
+        "phase": "build"
+      },
+      {
+        "name": "nightly-pipeline",
+        "description": "Nightly pipeline"
+      }
+    ],
+    "tools": {
+      "components": [
+        {
+          "type": "application",
+          "name": "cyclonedx-cli",
+          "version": "0.33.1"
+        }
+      ]
+    },
+    "component": {
+      "type": "application",
+      "bom-ref": "app-1",
+      "name": "acme-ml-service",
+      "version": "4.0.0"
+    }
+  },
+  "components": [
+    {
+      "type": "machine-learning-model",
+      "bom-ref": "model-1",
+      "name": "sentiment-classifier",
+      "version": "1.2.0",
+      "tags": [
+        "nlp",
+        "production"
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0",
+            "acknowledgement": "declared"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "model-card",
+          "url": "https://example.com/models/sentiment-classifier/card"
+        },
+        {
+          "type": "website",
+          "url": "https://example.com/models/sentiment-classifier"
+        }
+      ]
+    }
+  ],
+  "externalReferences": [
+    {
+      "type": "attestation",
+      "url": "https://example.com/attestations/build.json"
+    },
+    {
+      "type": "security-contact",
+      "url": "https://example.com/.well-known/security.txt"
+    }
+  ],
+  "dependencies": [
+    {
+      "ref": "app-1",
+      "dependsOn": [
+        "model-1"
+      ]
+    },
+    {
+      "ref": "model-1"
+    }
+  ]
+}

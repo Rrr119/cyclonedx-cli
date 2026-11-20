@@ -113,6 +113,16 @@ Options:
   --output-version <v1_0|v1_1|v1_2|v1_3|v1_4|v1_5|v1_6|v1_7>   Specify output BOM specification version. (ignored for CSV and SPDX formats)
 ```
 
+When `--output-version` is used the BOM is converted between specification
+versions, for example between CycloneDX v1.4 and v1.6. Upgrades are lossless.
+Downgrades drop elements that don't exist in the target version (e.g.
+`formulation`, `annotations`, `declarations`, `metadata.lifecycles`) and map
+field values that are invalid in the target version to the closest valid
+value (e.g. unknown external reference types become `other`). Every action
+taken is reported on stderr. When the version changes, the converted BOM is
+also validated against the target version schema and the command fails if
+the result is invalid.
+
 ### Examples
 
 Converting from XML to JSON format:  

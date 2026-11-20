@@ -15,6 +15,7 @@
 // SPDX-License-Identifier: Apache-2.0
 // Copyright (c) OWASP Foundation. All Rights Reserved.
 using System;
+using System.Collections.Generic;
 using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.CommandLine.NamingConventionBinder;
@@ -59,6 +60,41 @@ namespace CycloneDX.Cli.Commands
                 {
                     await Console.Error.WriteLineAsync("Unable to auto-detect output format from output filename").ConfigureAwait(false);
                     return (int)ExitCode.ParameterValidationError;
+                }
+            }
+
+            if (options.OutputVersion.HasValue
+                && (options.OutputFormat == ConvertFormat.xml
+                    || options.OutputFormat == ConvertFormat.json
+                    || options.OutputFormat == ConvertFormat.protobuf))
+            {
+                var versionChanged = inputBom.SpecVersion != options.OutputVersion.Value;
+                var mappingReport = new List<string>();
+                inputBom = BomVersionMapper.MapToVersion(inputBom, options.OutputVersion.Value, mappingReport);
+                foreach (var reportEntry in mappingReport)
+                {
+                    await Console.Error.WriteLineAsync(reportEntry).ConfigureAwait(false);
+                }
+
+                if (versionChanged)
+                {
+                    var validationResult = CliUtils.ValidateBomToVersion(inputBom, options.OutputFormat, options.OutputVersion.Value);
+                    if (validationResult != null)
+                    {
+                        if (!validationResult.Valid)
+                        {
+                            await Console.Error.WriteLineAsync("Converted BOM failed schema validation:").ConfigureAwait(false);
+                            if (validationResult.Messages != null)
+                            {
+                                foreach (var message in validationResult.Messages)
+                                {
+                                    await Console.Error.WriteLineAsync(message).ConfigureAwait(false);
+                                }
+                            }
+                            return (int)ExitCode.ValidationFailed;
+                        }
+                        await Console.Error.WriteLineAsync($"Converted BOM validated successfully against CycloneDX spec version {SpecificationVersionHelpers.VersionString(options.OutputVersion.Value)}.").ConfigureAwait(false);
+                    }
                 }
             }
 

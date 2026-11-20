@@ -225,5 +225,18 @@ namespace CycloneDX.Cli
         public static string NullIfWhiteSpace(this string str) {
             return String.IsNullOrWhiteSpace(str) ? null : str;
         }
+
+        public static ValidationResult ValidateBomToVersion(Bom bom, ConvertFormat format, SpecificationVersion version)
+        {
+            switch (format)
+            {
+                case ConvertFormat.xml:
+                    return Xml.Validator.Validate(Xml.Serializer.Serialize(bom), version);
+                case ConvertFormat.json:
+                    return Json.Validator.Validate(Json.Serializer.Serialize(bom), version);
+                default:
+                    return null;
+            }
+        }
     }
 }

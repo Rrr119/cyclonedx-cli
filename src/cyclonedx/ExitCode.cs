@@ -25,6 +25,7 @@ namespace CycloneDX.Cli
         ParameterValidationError,
         UnsupportedFormat,
         SignatureNotFound,
-        SignatureFailedVerification
+        SignatureFailedVerification,
+        ValidationFailed
     }
 }

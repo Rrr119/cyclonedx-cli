@@ -1,0 +1,43 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.4",
+  "serialNumber": "urn:uuid:1b4f1c2a-0004-4a01-9a01-000000000004",
+  "version": 2,
+  "components": [
+    {
+      "type": "container",
+      "bom-ref": "container-1",
+      "name": "acme/frontend",
+      "version": "1.9.0",
+      "components": [
+        {
+          "type": "library",
+          "bom-ref": "lib-nested-1",
+          "name": "react",
+          "version": "18.2.0",
+          "purl": "pkg:npm/react@18.2.0",
+          "swid": {
+            "tagId": "acme-react-18.2.0",
+            "name": "react",
+            "version": "18.2.0"
+          },
+          "evidence": {
+            "licenses": [
+              {
+                "license": {
+                  "id": "MIT"
+                }
+              }
+            ]
+          },
+          "properties": [
+            {
+              "name": "acme:build:commit",
+              "value": "abc123"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

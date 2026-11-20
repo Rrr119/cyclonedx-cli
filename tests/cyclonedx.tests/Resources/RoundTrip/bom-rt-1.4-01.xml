@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bom xmlns="http://cyclonedx.org/schema/bom/1.4" serialNumber="urn:uuid:1b4f1c2a-0001-4a01-9a01-000000000001" version="1">
+  <metadata>
+    <timestamp>2024-01-15T10:00:00Z</timestamp>
+    <tools>
+      <tool>
+        <vendor>OWASP Foundation</vendor>
+        <name>cyclonedx-cli</name>
+        <version>0.33.1</version>
+      </tool>
+    </tools>
+    <component type="application" bom-ref="app-1">
+      <supplier>
+        <name>Acme Inc</name>
+      </supplier>
+      <name>acme-app</name>
+      <version>2.1.0</version>
+    </component>
+  </metadata>
+  <components>
+    <component type="library" bom-ref="lib-1">
+      <group>org.example</group>
+      <name>example-lib</name>
+      <version>1.4.2</version>
+      <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-256">2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824</hash>
+      </hashes>
+      <licenses>
+        <license>
+          <id>Apache-2.0</id>
+        </license>
+      </licenses>
+      <purl>pkg:maven/org.example/example-lib@1.4.2</purl>
+      <externalReferences>
+        <reference type="website">
+          <url>https://example.com/example-lib</url>
+        </reference>
+      </externalReferences>
+    </component>
+  </components>
+  <dependencies>
+    <dependency ref="app-1">
+      <dependency ref="lib-1"/>
+    </dependency>
+    <dependency ref="lib-1"/>
+  </dependencies>
+</bom>

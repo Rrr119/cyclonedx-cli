@@ -1,0 +1,58 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.4",
+  "serialNumber": "urn:uuid:1b4f1c2a-0002-4a01-9a01-000000000002",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2024-02-20T08:30:00Z",
+    "authors": [
+      {
+        "name": "Jane Doe",
+        "email": "jane@example.com"
+      }
+    ]
+  },
+  "services": [
+    {
+      "bom-ref": "service-1",
+      "provider": {
+        "name": "Acme Cloud"
+      },
+      "name": "inventory-api",
+      "version": "3.0.1",
+      "endpoints": [
+        "https://api.example.com/inventory"
+      ],
+      "authenticated": true,
+      "x-trust-boundary": true,
+      "data": [
+        {
+          "flow": "inbound",
+          "classification": "confidential"
+        }
+      ]
+    }
+  ],
+  "externalReferences": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/example/inventory-api"
+    },
+    {
+      "type": "issue-tracker",
+      "url": "https://issues.example.com/inventory-api"
+    },
+    {
+      "type": "release-notes",
+      "url": "https://example.com/inventory-api/releases"
+    }
+  ],
+  "compositions": [
+    {
+      "aggregate": "complete",
+      "assemblies": [
+        "service-1"
+      ]
+    }
+  ]
+}

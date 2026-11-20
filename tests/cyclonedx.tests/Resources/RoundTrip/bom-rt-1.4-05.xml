@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bom xmlns="http://cyclonedx.org/schema/bom/1.4" serialNumber="urn:uuid:1b4f1c2a-0005-4a01-9a01-000000000005" version="1">
+  <metadata>
+    <timestamp>2024-04-05T09:15:00Z</timestamp>
+    <authors>
+      <author>
+        <name>John Smith</name>
+      </author>
+    </authors>
+    <supplier>
+      <name>Acme Inc</name>
+      <url>https://acme.example.com</url>
+    </supplier>
+    <licenses>
+      <license>
+        <id>MIT</id>
+      </license>
+    </licenses>
+    <properties>
+      <property name="acme:meta:build-id">42</property>
+    </properties>
+  </metadata>
+  <components>
+    <component type="operating-system" bom-ref="os-1">
+      <name>Ubuntu</name>
+      <version>22.04</version>
+      <cpe>cpe:2.3:o:canonical:ubuntu_linux:22.04:*:*:*:*:*:*:*</cpe>
+      <externalReferences>
+        <reference type="documentation">
+          <url>https://ubuntu.com/docs</url>
+        </reference>
+        <reference type="advisories">
+          <url>https://ubuntu.com/security/notices</url>
+        </reference>
+      </externalReferences>
+    </component>
+    <component type="file" bom-ref="file-1">
+      <name>config.yaml</name>
+      <version>1.0</version>
+      <hashes>
+        <hash alg="SHA-1">a94a8fe5ccb19ba61c4c0873d391e987982fbbd3</hash>
+        <hash alg="SHA-512">ee26b0dd4af7e749aa1a8ee3c10ae9923f618980772e473f8819a5d4940e0db27ac185f8a0e1d5f84f88bc887fd67b143732c304cc5fa9ad8e6f57f50028a8ff</hash>
+      </hashes>
+      <licenses>
+        <expression>Apache-2.0 OR MIT</expression>
+      </licenses>
+    </component>
+  </components>
+</bom>
