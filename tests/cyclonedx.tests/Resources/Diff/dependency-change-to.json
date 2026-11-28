@@ -1,0 +1,53 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.5",
+  "serialNumber": "urn:uuid:33333333-3333-3333-3333-333333333333",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2026-03-02T00:00:00Z",
+    "tools": [
+      {
+        "vendor": "Acme",
+        "name": "sbom-generator",
+        "version": "1.0.1"
+      }
+    ],
+    "component": {
+      "type": "application",
+      "bom-ref": "app",
+      "name": "demo",
+      "version": "1.0.0",
+      "purl": "pkg:generic/demo@1.0.0"
+    }
+  },
+  "components": [
+    {
+      "type": "library",
+      "bom-ref": "lib-a",
+      "name": "lib-a",
+      "version": "1.0.0",
+      "purl": "pkg:npm/lib-a@1.0.0"
+    },
+    {
+      "type": "library",
+      "bom-ref": "lib-c",
+      "name": "lib-c",
+      "version": "3.0.0",
+      "purl": "pkg:npm/lib-c@3.0.0"
+    }
+  ],
+  "dependencies": [
+    {
+      "ref": "app",
+      "dependsOn": [
+        "lib-a"
+      ]
+    },
+    {
+      "ref": "lib-a",
+      "dependsOn": [
+        "lib-c"
+      ]
+    }
+  ]
+}

@@ -23,5 +23,6 @@ namespace CycloneDX.Cli.Models
     internal class DiffResult
     {
         public Dictionary<string,DiffItem<Component>> ComponentVersions { get; set; }
+        public SemanticDiffResult SemanticDiff { get; set; }
     }
 }

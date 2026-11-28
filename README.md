@@ -161,12 +161,31 @@ Options:
   --to-format <autodetect|json|protobuf|xml>    Specify to file format.
   --output-format <json|text>                   Specify output format (defaults to text).
   --component-versions                          Report component versions that have been added, removed or modified.
+  --semantic, --semantic-diff                   Report semantic changes to components, versions and dependency edges.
 ```
 
 ### Examples
 
 Reporting on components with version changes:  
 `cyclonedx-cli diff sbom-from.xml sbom-to.xml --component-versions`
+
+Reporting semantic changes while filtering generator metadata noise:
+
+`cyclonedx-cli diff sbom-from.json sbom-to.json --semantic`
+
+The semantic diff matches components by PURL (ignoring the version) or by
+group/name. It reports added and removed components, version changes, and
+added and removed dependency edges. Dependency edges are also compared by
+component identity, so a version bump does not make the complete dependency
+graph appear changed.
+
+`metadata.timestamp` and generator tool version changes are classified as
+noise. They are returned in a separate `noise` collection and are never
+included in the semantic change counts.
+
+The default `diff` output is semantic. The legacy
+`--component-versions` option keeps its existing text and JSON output, and
+can be combined with `--semantic` when both reports are required.
 
 ## Keygen Command
 

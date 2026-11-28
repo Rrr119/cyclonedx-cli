@@ -19,7 +19,6 @@ using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.CommandLine.NamingConventionBinder;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using CycloneDX.Cli.Models;
 using CycloneDX.Utils;
@@ -28,6 +27,8 @@ namespace CycloneDX.Cli.Commands
 {
     internal static class DiffCommand
     {
+        private static readonly string[] SemanticOptionAliases = { "--semantic", "--semantic-diff" };
+
         internal static void Configure(RootCommand rootCommand)
         {
             var subCommand = new Command("diff", "Generate a BOM diff");
@@ -37,6 +38,9 @@ namespace CycloneDX.Cli.Commands
             subCommand.Add(new Option<CycloneDXBomFormat>("--to-format", "Specify to file format."));
             subCommand.Add(new Option<CommandOutputFormat>("--output-format", "Specify output format (defaults to text)."));
             subCommand.Add(new Option<bool>("--component-versions", "Report component versions that have been added, removed or modified."));
+            subCommand.Add(new Option<bool>(
+                SemanticOptionAliases,
+                "Report semantic changes to components, versions and dependency edges. Metadata noise is reported separately."));
             subCommand.Handler = CommandHandler.Create<DiffCommandOptions>(Diff);
             rootCommand.Add(subCommand);
         }
@@ -55,15 +59,13 @@ namespace CycloneDX.Cli.Commands
                 result.ComponentVersions = CycloneDXUtils.ComponentVersionDiff(fromBom, toBom);
             }
 
+            if (options.Semantic || !options.ComponentVersions)
+            {
+                result.SemanticDiff = SemanticDiff.Compare(fromBom, toBom);
+            }
+
             if (options.OutputFormat == CommandOutputFormat.json)
             {
-                var jsonOptions = new JsonSerializerOptions
-                {
-                    WriteIndented = true,
-                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-                };
-
                 #pragma warning disable IL2026
                 Console.WriteLine(JsonSerializer.Serialize<DiffResult>(result, Json.Utils.GetJsonSerializerOptions()));
                 #pragma warning restore IL2026
@@ -105,9 +107,79 @@ namespace CycloneDX.Cli.Commands
                     
                     Console.WriteLine();
                 }
+
+                if (result.SemanticDiff != null)
+                {
+                    WriteSemanticDiff(result.SemanticDiff);
+                }
             }
 
             return (int)ExitCode.Ok;
+        }
+
+        private static void WriteSemanticDiff(SemanticDiffResult semanticDiff)
+        {
+            Console.WriteLine("Semantic changes:");
+            Console.WriteLine();
+
+            if (!semanticDiff.HasChanges)
+            {
+                Console.WriteLine("None");
+            }
+            else
+            {
+                if (semanticDiff.Components.Removed.Count > 0 || semanticDiff.Components.Added.Count > 0)
+                {
+                    Console.WriteLine("Components:");
+                    foreach (var component in semanticDiff.Components.Removed)
+                    {
+                        Console.WriteLine($"- {component.DisplayName}");
+                    }
+                    foreach (var component in semanticDiff.Components.Added)
+                    {
+                        Console.WriteLine($"+ {component.DisplayName}");
+                    }
+                    Console.WriteLine();
+                }
+
+                if (semanticDiff.Versions.Count > 0)
+                {
+                    Console.WriteLine("Versions:");
+                    foreach (var version in semanticDiff.Versions)
+                    {
+                        Console.WriteLine($"~ {version.DisplayName}: {version.FromVersion} -> {version.ToVersion}");
+                    }
+                    Console.WriteLine();
+                }
+
+                if (semanticDiff.Dependencies.Removed.Count > 0 || semanticDiff.Dependencies.Added.Count > 0)
+                {
+                    Console.WriteLine("Dependencies:");
+                    foreach (var dependency in semanticDiff.Dependencies.Removed)
+                    {
+                        Console.WriteLine($"- {dependency.DisplayValue}");
+                    }
+                    foreach (var dependency in semanticDiff.Dependencies.Added)
+                    {
+                        Console.WriteLine($"+ {dependency.DisplayValue}");
+                    }
+                    Console.WriteLine();
+                }
+            }
+
+            Console.WriteLine("Noise (excluded from changes):");
+            if (!semanticDiff.HasNoise)
+            {
+                Console.WriteLine("None");
+            }
+            else
+            {
+                foreach (var noise in semanticDiff.Noise)
+                {
+                    Console.WriteLine($"= {noise.DisplayValue}");
+                }
+            }
+            Console.WriteLine();
         }
     }
 }

@@ -25,5 +25,12 @@ namespace CycloneDX.Cli.Commands
         public CycloneDXBomFormat ToFormat { get; set; }
         public CommandOutputFormat OutputFormat { get; set; }
         public bool ComponentVersions { get; set; }
+        public bool Semantic { get; set; }
+
+        public bool SemanticDiff
+        {
+            get => Semantic;
+            set => Semantic = value;
+        }
     }
 }
